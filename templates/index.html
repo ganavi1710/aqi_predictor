@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart AQI Dashboard</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+    <!-- Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>🌿 AQI</h2>
+
+            <p>Smart City</p>
+
+        </div>
+
+       <ul>
+
+    <li class="active"
+        onclick="scrollToSection('dashboard', this)">
+
+        <i class="fa-solid fa-chart-line"></i>
+        Dashboard
+
+    </li>
+
+    <li onclick="scrollToSection('map-section', this)">
+
+        <i class="fa-solid fa-map-location-dot"></i>
+        Live Map
+
+    </li>
+
+    <li onclick="scrollToSection('analytics', this)">
+
+        <i class="fa-solid fa-chart-column"></i>
+        Analytics
+
+    </li>
+
+    <li onclick="scrollToSection('prediction', this)">
+
+        <i class="fa-solid fa-brain"></i>
+        Prediction
+
+    </li>
+
+</ul>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div>
+
+                <h1>Smart Air Quality Monitoring System</h1>
+
+                <p>
+                    Real-time • Accurate • Intelligent
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- TOP CARDS -->
+
+        <div class="top-cards" id="dashboard">
+
+            <!-- AQI CARD -->
+
+            <div class="card aqi-card">
+
+                <h3>🟢 LIVE AQI</h3>
+
+                <div class="aqi-circle">
+
+                    <span id="liveAQI">--</span>
+
+                </div>
+
+                <h2 id="statusBox">Loading...</h2>
+
+                <p id="cityName">
+                    📍 Detecting location...
+                </p>
+
+            </div>
+
+            <!-- WEATHER -->
+
+            <div class="card">
+
+                <h3>🌤 WEATHER CONDITIONS</h3>
+
+                <h1 id="temp">--°C</h1>
+
+                <p id="extra">
+                    Humidity: -- | Wind: --
+                </p>
+
+            </div>
+
+            <!-- PREDICTION -->
+
+            <div class="card">
+
+                <h3>🔮 FUTURE AQI PREDICTION</h3>
+
+                <h1 id="predictedAQI">--</h1>
+
+                <p id="predictionStatus">
+                    Predicting future AQI...
+                </p>
+
+            </div>
+
+        </div>
+<!-- AI PREDICTION SECTION -->
+
+<div class="prediction-panel">
+
+    <div class="card prediction-form-card">
+
+        <h3>🤖 AQI Prediction Using AI</h3>
+
+        <form method="POST">
+
+            <input type="text"
+                   name="pm25"
+                   placeholder="Enter PM2.5">
+
+            <input type="text"
+                   name="co"
+                   placeholder="Enter CO">
+
+            <input type="text"
+                   name="no2"
+                   placeholder="Enter NO2">
+
+            <button type="submit">
+
+                Predict AQI
+
+            </button>
+
+        </form>
+
+        {% if prediction %}
+
+        <div class="prediction-result">
+
+            <h2>
+                Predicted AQI:
+                {{ prediction }}
+            </h2>
+
+            <p>
+                {{ status }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+        <!-- SECOND ROW -->
+
+        <div class="middle-section" id="map-section">
+
+            <!-- MAP -->
+
+            <div class="card map-card">
+
+                <h3>🗺 LIVE AQI MAP</h3>
+
+                <div id="map"></div>
+
+            </div>
+
+            <!-- CHART -->
+
+            <div class="card chart-card" id="analytics">
+
+                <h3>📈 AQI TREND</h3>
+
+                <canvas id="chart"></canvas>
+
+            </div>
+
+        </div>
+
+        <!-- BOTTOM -->
+
+        <div class="bottom-section">
+
+            <div class="card" id="prediction">
+
+                <h3>🧠 AI INSIGHTS</h3>
+
+                <p id="aiInsight">
+                    Air quality is safe in your area.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h3>💡 RECOMMENDATIONS</h3>
+
+                <ul class="tips">
+
+                    <li>✔ Ideal for outdoor activities</li>
+
+                    <li>✔ Keep windows open</li>
+
+                    <li>✔ Stay hydrated</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- JS -->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>

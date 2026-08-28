@@ -1,0 +1,571 @@
+/* =========================
+   GLOBAL
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:
+    linear-gradient(to bottom,#071019,#0b1f2d,#102b3f);
+
+    color:white;
+
+    overflow-x:hidden;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+    display:flex;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+
+    width:240px;
+
+    height:100vh;
+
+    background:
+    rgba(255,255,255,0.04);
+
+    backdrop-filter:blur(20px);
+
+    border-right:
+    1px solid rgba(255,255,255,0.08);
+
+    padding:30px 20px;
+
+    position:fixed;
+
+    left:0;
+    top:0;
+}
+
+.logo{
+
+    margin-bottom:50px;
+}
+
+.logo h2{
+
+    font-size:36px;
+
+    color:#4dff88;
+}
+
+.logo p{
+
+    color:#9db2c7;
+}
+
+.sidebar ul{
+
+    list-style:none;
+}
+
+.sidebar ul li{
+
+    padding:16px;
+
+    margin-bottom:12px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    font-size:16px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+}
+
+.sidebar ul li:hover,
+.sidebar ul .active{
+
+    background:
+    rgba(0,255,128,0.15);
+
+    color:#4dff88;
+
+    box-shadow:
+    0 0 20px rgba(0,255,128,0.2);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+
+    margin-left:240px;
+
+    width:calc(100% - 240px);
+
+    padding:30px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    margin-bottom:20px;
+}
+
+.header h1{
+
+    font-size:38px;
+
+    font-weight:700;
+    text-shadow:0 0 25px rgba(0,255,136,0.3);
+}
+
+.header p{
+
+    color:#9fb3c8;
+
+    margin-top:8px;
+}
+
+#clock{
+
+    margin-top:12px;
+
+    color:#8da9c4;
+
+    font-size:14px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card{
+
+    background:
+    rgba(255,255,255,0.05);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(20px);
+
+    border-radius:24px;
+
+    padding:24px;
+
+    box-shadow:
+    0 8px 40px rgba(0,0,0,0.4);
+
+    transition:0.3s;
+
+    animation:fadeUp 0.6s ease;
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 0 30px rgba(0,255,150,0.15);
+}
+
+/* =========================
+   TOP CARDS
+========================= */
+
+.top-cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+/* =========================
+   AQI CARD
+========================= */
+
+.aqi-card{
+
+    text-align:center;
+}
+
+.aqi-circle{
+
+    width:190px;
+
+    height:190px;
+
+    border-radius:50%;
+
+    margin:25px auto;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:58px;
+
+    font-weight:700;
+
+    background:
+    conic-gradient(
+    #00ff88 0deg,
+    #ffee00 120deg,
+    #ff8800 220deg,
+    #ff0040 320deg,
+    #a000ff 360deg
+    );
+
+    position:relative;
+
+    transition:0.3s;
+}
+
+.aqi-circle:hover{
+
+    transform:scale(1.03);
+}
+
+.aqi-circle::before{
+
+    content:'';
+
+    position:absolute;
+
+    width:145px;
+
+    height:145px;
+
+    border-radius:50%;
+
+    background:#08131d;
+}
+
+.aqi-circle span{
+
+    position:relative;
+
+    z-index:10;
+}
+
+#statusBox{
+
+    margin-top:10px;
+
+    color:#4dff88;
+}
+
+/* =========================
+   MAP + CHART
+========================= */
+
+.middle-section{
+
+    display:grid;
+
+    grid-template-columns:
+    1.3fr 1fr;
+
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+#map{
+
+    height:460px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+}
+
+/* =========================
+   CHART
+========================= */
+
+.chart-card canvas{
+
+    margin-top:20px;
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:10px;
+}
+
+/* =========================
+   BOTTOM
+========================= */
+
+.bottom-section{
+
+    display:grid;
+
+    grid-template-columns:
+    1fr 1fr;
+
+    gap:20px;
+}
+
+/* =========================
+   TIPS
+========================= */
+
+.tips{
+
+    margin-top:15px;
+
+    padding-left:20px;
+}
+
+.tips li{
+
+    margin-bottom:12px;
+
+    color:#d8e4ef;
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.card h3{
+
+    margin-bottom:18px;
+
+    color:#dce9f5;
+}
+
+.card p{
+
+    color:#b8c8d8;
+
+    line-height:1.8;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar{
+
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#00ff88;
+
+    border-radius:10px;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+    }
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+
+    .top-cards{
+
+        grid-template-columns:1fr;
+    }
+
+    .middle-section{
+
+        grid-template-columns:1fr;
+    }
+
+    .bottom-section{
+
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+
+        display:none;
+    }
+
+    .main{
+
+        margin-left:0;
+
+        width:100%;
+    }
+}
+/* =========================
+   AI PREDICTION PANEL
+========================= */
+
+.prediction-panel{
+
+    margin-bottom:25px;
+}
+
+.prediction-form-card{
+
+    width:100%;
+}
+
+.prediction-form-card form{
+
+    display:flex;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-top:20px;
+}
+
+.prediction-form-card input{
+
+    flex:1;
+
+    min-width:220px;
+
+    padding:18px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:16px;
+
+    background:
+    rgba(255,255,255,0.08);
+
+    color:white;
+
+    font-size:16px;
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    transition:0.3s;
+}
+
+.prediction-form-card input:focus{
+
+    border:
+    1px solid #00ff88;
+
+    box-shadow:
+    0 0 20px rgba(0,255,136,0.2);
+}
+
+.prediction-form-card input::placeholder{
+
+    color:#9db2c7;
+}
+
+.prediction-form-card button{
+
+    padding:18px 28px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #00ff88,
+    #00bfff
+    );
+
+    color:#04131d;
+
+    font-weight:700;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.prediction-form-card button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 0 25px rgba(0,255,136,0.4);
+}
+
+/* RESULT */
+
+.prediction-result{
+
+    margin-top:25px;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    background:
+    rgba(0,255,136,0.08);
+
+    border:
+    1px solid rgba(0,255,136,0.15);
+}
+
+.prediction-result h2{
+
+    color:#00ff88;
+
+    margin-bottom:10px;
+}
+
+.prediction-result p{
+    color:#dce9f5;
+}
