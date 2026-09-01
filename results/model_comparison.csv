@@ -1,0 +1,8 @@
+Model_Key,Algorithm,MAE,MSE,RMSE,R2_Score,CV_Mean_RMSE,CV_Std_RMSE,Training_Time_Sec,Is_Best_Model
+gradient_boosting,Gradient Boosting Regressor,2.35,9.887,3.144,0.9954,6.142,1.637,5.368,True
+extra_trees,Extra Trees Regressor,2.635,11.163,3.341,0.9948,6.316,0.27,2.91,False
+random_forest,Random Forest Regressor,2.732,13.573,3.684,0.9937,6.502,0.091,5.435,False
+decision_tree,Decision Tree Regressor,3.387,23.557,4.854,0.9891,7.156,0.175,2.479,False
+svr,Support Vector Regression (SVR),4.171,42.638,6.53,0.9803,10.201,2.324,2.21,False
+knn,K-Nearest Neighbors Regressor (KNN),10.431,182.985,13.527,0.9153,15.847,0.368,0.146,False
+linear_regression,Linear Regression,12.164,288.816,16.995,0.8663,17.194,5.479,0.01,False

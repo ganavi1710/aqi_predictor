@@ -1,25 +1,10 @@
-from sklearn.linear_model import LinearRegression
-import pickle
-import numpy as np
+"""
+Model creation entry point.
+Invokes the multi-algorithm Machine Learning training, cross-validation,
+and benchmarking pipeline.
+"""
 
-# Sample training data
-X = np.array([
-    [50, 1, 20],
-    [100, 2, 40],
-    [150, 3, 60],
-    [200, 4, 80]
-])
+from ml.train_models import run_multi_model_pipeline
 
-y = np.array([50, 100, 150, 200])
-
-# Train model
-model = LinearRegression()
-model.fit(X, y)
-
-# Save model
-import os
-
-file_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
-pickle.dump(model, open(file_path, 'wb'))
-
-print("Model created successfully!")
+if __name__ == '__main__':
+    run_multi_model_pipeline()

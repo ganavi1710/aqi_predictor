@@ -2,35 +2,25 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Smart AQI Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart AQI Dashboard - Multi-Model ML Intelligence</title>
 
     <!-- CSS -->
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-    <!-- Chart -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Leaflet -->
-    <link rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 </head>
 
 <body>
@@ -38,241 +28,435 @@
 <div class="container">
 
     <!-- SIDEBAR -->
-
     <aside class="sidebar">
-
         <div class="logo">
-
             <h2>🌿 AQI</h2>
-
-            <p>Smart City</p>
-
+            <p>Multi-Model AI Suite</p>
         </div>
 
-       <ul>
+        <ul>
+            <li class="active" onclick="scrollToSection('dashboard', this)">
+                <i class="fa-solid fa-chart-line"></i> Dashboard
+            </li>
+            <li onclick="scrollToSection('map-section', this)">
+                <i class="fa-solid fa-map-location-dot"></i> Live Map
+            </li>
+            <li onclick="scrollToSection('analytics', this)">
+                <i class="fa-solid fa-chart-column"></i> Live Trend
+            </li>
+            <li onclick="scrollToSection('prediction-section', this)">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Predict AQI
+            </li>
+            <li onclick="scrollToSection('benchmark-section', this)">
+                <i class="fa-solid fa-trophy"></i> Model Benchmark
+            </li>
+            <li onclick="scrollToSection('diagnostics-section', this)">
+                <i class="fa-solid fa-microchip"></i> Diagnostics & Residuals
+            </li>
+            <li onclick="scrollToSection('history-section', this)">
+                <i class="fa-solid fa-clock-rotate-left"></i> Prediction History
+            </li>
+        </ul>
 
-    <li class="active"
-        onclick="scrollToSection('dashboard', this)">
-
-        <i class="fa-solid fa-chart-line"></i>
-        Dashboard
-
-    </li>
-
-    <li onclick="scrollToSection('map-section', this)">
-
-        <i class="fa-solid fa-map-location-dot"></i>
-        Live Map
-
-    </li>
-
-    <li onclick="scrollToSection('analytics', this)">
-
-        <i class="fa-solid fa-chart-column"></i>
-        Analytics
-
-    </li>
-
-    <li onclick="scrollToSection('prediction', this)">
-
-        <i class="fa-solid fa-brain"></i>
-        Prediction
-
-    </li>
-
-</ul>
-
+        <div class="sidebar-model-tag">
+            <span class="badge-best-mini"><i class="fa-solid fa-award"></i> Top Model</span>
+            <p id="sidebarBestName">{{ metadata.get('best_model_name', 'Gradient Boosting Regressor') }}</p>
+        </div>
     </aside>
 
     <!-- MAIN CONTENT -->
-
     <main class="main">
 
         <!-- HEADER -->
-
         <div class="header">
-
-            <div>
-
-                <h1>Smart Air Quality Monitoring System</h1>
-
-                <p>
-                    Real-time • Accurate • Intelligent
-                </p>
-
+            <div class="header-content">
+                <h1>Smart Air Quality Monitoring & Prediction</h1>
+                <p>Real-Time Atmospheric Telemetry • 7-Algorithm ML Benchmark • Health Intelligence</p>
             </div>
-
+            <div class="live-clock-badge">
+                <i class="fa-regular fa-clock"></i> <span id="clock">--:--:--</span>
+            </div>
         </div>
 
-        <!-- TOP CARDS -->
-
+        <!-- TOP STAT CARDS -->
         <div class="top-cards" id="dashboard">
 
-            <!-- AQI CARD -->
-
+            <!-- LIVE AQI CARD -->
             <div class="card aqi-card">
-
-                <h3>🟢 LIVE AQI</h3>
-
+                <h3>🟢 LIVE AIR QUALITY</h3>
                 <div class="aqi-circle">
-
                     <span id="liveAQI">--</span>
-
                 </div>
-
-                <h2 id="statusBox">Loading...</h2>
-
-                <p id="cityName">
-                    📍 Detecting location...
-                </p>
-
+                <h2 id="statusBox">Loading telemetry...</h2>
+                <p id="cityName"><i class="fa-solid fa-location-crosshairs"></i> Detecting location...</p>
             </div>
 
-            <!-- WEATHER -->
-
+            <!-- WEATHER CARD -->
             <div class="card">
-
-                <h3>🌤 WEATHER CONDITIONS</h3>
-
+                <h3>🌤 WEATHER & ATMOSPHERE</h3>
                 <h1 id="temp">--°C</h1>
-
-                <p id="extra">
-                    Humidity: -- | Wind: --
-                </p>
-
+                <p id="extra">Humidity: --% | Wind: -- km/h</p>
+                <div class="weather-subgrid">
+                    <div class="metric-pill"><span>PM2.5:</span> <strong id="livePM25">--</strong> µg/m³</div>
+                    <div class="metric-pill"><span>CO:</span> <strong id="liveCO">--</strong> mg/m³</div>
+                    <div class="metric-pill"><span>NO2:</span> <strong id="liveNO2">--</strong> µg/m³</div>
+                </div>
             </div>
 
-            <!-- PREDICTION -->
-
-            <div class="card">
-
-                <h3>🔮 FUTURE AQI PREDICTION</h3>
-
+            <!-- BEST ML MODEL PROJECTION CARD -->
+            <div class="card ml-card-highlight">
+                <div class="card-header-flex">
+                    <h3>🏆 BEST MODEL PROJECTION</h3>
+                    <span class="pill-badge-gold" id="bestBadge">{{ metadata.get('best_model_name', 'Gradient Boosting') }}</span>
+                </div>
                 <h1 id="predictedAQI">--</h1>
-
-                <p id="predictionStatus">
-                    Predicting future AQI...
-                </p>
-
+                <p id="predictionCategory">Computing forecast...</p>
+                <div class="forecast-tip" id="predictionTip">Analyzing environmental parameters...</div>
             </div>
 
         </div>
-<!-- AI PREDICTION SECTION -->
 
-<div class="prediction-panel">
-
-    <div class="card prediction-form-card">
-
-        <h3>🤖 AQI Prediction Using AI</h3>
-
-        <form method="POST">
-
-            <input type="text"
-                   name="pm25"
-                   placeholder="Enter PM2.5">
-
-            <input type="text"
-                   name="co"
-                   placeholder="Enter CO">
-
-            <input type="text"
-                   name="no2"
-                   placeholder="Enter NO2">
-
-            <button type="submit">
-
-                Predict AQI
-
-            </button>
-
-        </form>
-
-        {% if prediction %}
-
-        <div class="prediction-result">
-
-            <h2>
-                Predicted AQI:
-                {{ prediction }}
-            </h2>
-
-            <p>
-                {{ status }}
-            </p>
-
-        </div>
-
-        {% endif %}
-
-    </div>
-
-</div>
-        <!-- SECOND ROW -->
-
+        <!-- MIDDLE SECTION: MAP & REAL-TIME TREND -->
         <div class="middle-section" id="map-section">
 
-            <!-- MAP -->
-
+            <!-- MAP CARD -->
             <div class="card map-card">
-
-                <h3>🗺 LIVE AQI MAP</h3>
-
+                <div class="card-header-flex">
+                    <h3>🗺 INTERACTIVE TELEMETRY MAP</h3>
+                    <span class="hint-tag"><i class="fa-solid fa-hand-pointer"></i> Click anywhere to fetch live telemetry</span>
+                </div>
                 <div id="map"></div>
-
             </div>
 
-            <!-- CHART -->
-
+            <!-- CHART CARD -->
             <div class="card chart-card" id="analytics">
-
-                <h3>📈 AQI TREND</h3>
-
-                <canvas id="chart"></canvas>
-
+                <h3>📈 REAL-TIME AQI FLUCTUATION TREND</h3>
+                <div class="chart-canvas-container">
+                    <canvas id="chart"></canvas>
+                </div>
             </div>
 
         </div>
 
-        <!-- BOTTOM -->
+        <!-- DEDICATED MULTI-MODEL PREDICTION SECTION -->
+        <div class="section-container" id="prediction-section">
+            <div class="card prediction-form-card">
+                <div class="card-header-flex">
+                    <div>
+                        <h2>🔮 Multi-Model AQI Prediction Studio</h2>
+                        <p class="subtitle">Select any of the 7 evaluated algorithms or let the system route to the automatically determined Best Model.</p>
+                    </div>
+                    <button type="button" id="btnUseCurrent" class="btn-secondary" title="Populate live telemetry from active map location">
+                        <i class="fa-solid fa-bolt"></i> Use Current Air Quality
+                    </button>
+                </div>
 
-        <div class="bottom-section">
+                <form id="predictionForm">
+                    <!-- MODEL SELECTION ROW -->
+                    <div class="model-select-container">
+                        <label for="model_select"><i class="fa-solid fa-brain"></i> Prediction Algorithm:</label>
+                        <select id="model_select" name="model" class="model-select-styled">
+                            <option value="best_model" selected>⭐ Best Model (Auto - {{ metadata.get('best_model_name', 'Gradient Boosting') }})</option>
+                            <option value="gradient_boosting">🚀 Gradient Boosting Regressor (Lowest RMSE)</option>
+                            <option value="extra_trees">🌴 Extra Trees Regressor</option>
+                            <option value="random_forest">🌲 Random Forest Regressor</option>
+                            <option value="decision_tree">🌳 Decision Tree Regressor</option>
+                            <option value="svr">⚡ Support Vector Regression (SVR - Scaled)</option>
+                            <option value="knn">📍 K-Nearest Neighbors (KNN - Scaled)</option>
+                            <option value="linear_regression">📈 Linear Regression (Baseline)</option>
+                        </select>
+                    </div>
 
-            <div class="card" id="prediction">
+                    <!-- ENVIRONMENTAL FEATURES GRID -->
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-smog"></i> PM2.5 (µg/m³) *</label>
+                            <input type="number" step="0.1" min="0" max="1000" id="input_pm25" name="pm25" placeholder="e.g. 65.4" required>
+                        </div>
 
-                <h3>🧠 AI INSIGHTS</h3>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-car"></i> CO (mg/m³) *</label>
+                            <input type="number" step="0.01" min="0" max="100" id="input_co" name="co" placeholder="e.g. 1.25" required>
+                        </div>
 
-                <p id="aiInsight">
-                    Air quality is safe in your area.
-                </p>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-industry"></i> NO2 (µg/m³) *</label>
+                            <input type="number" step="0.1" min="0" max="500" id="input_no2" name="no2" placeholder="e.g. 38.0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-temperature-half"></i> Temperature (°C)</label>
+                            <input type="number" step="0.1" min="-50" max="60" id="input_temp" name="temperature" placeholder="e.g. 26.5">
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-droplet"></i> Humidity (%)</label>
+                            <input type="number" step="1" min="0" max="100" id="input_hum" name="humidity" placeholder="e.g. 58">
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-wind"></i> Wind Speed (km/h)</label>
+                            <input type="number" step="0.1" min="0" max="150" id="input_wind" name="wind_speed" placeholder="e.g. 5.5">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="btnSubmitPredict" class="btn-primary">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Run Prediction
+                        </button>
+                        <span id="predictStatusMsg" class="status-inline"></span>
+                    </div>
+                </form>
+
+                <!-- DYNAMIC PREDICTION RESULT DISPLAY -->
+                <div id="predictionResultBox" class="prediction-result-panel" style="display: none;">
+                    <div class="result-header">
+                        <div>
+                            <span class="model-badge" id="resModelBadge"><i class="fa-solid fa-microchip"></i> Model: --</span>
+                            <span id="resBestTag" class="badge-winner-tag" style="display:none;"><i class="fa-solid fa-award"></i> Optimal Model</span>
+                        </div>
+                        <span id="resTimestamp" class="text-muted">Just now</span>
+                    </div>
+
+                    <div class="result-body-grid">
+                        <div class="result-stat-box">
+                            <span class="label">Predicted AQI</span>
+                            <div class="val-large" id="resAQI">--</div>
+                            <div class="category-badge-pill" id="resCategoryBadge">--</div>
+                        </div>
+
+                        <div class="result-advice-box">
+                            <h4><i class="fa-solid fa-heart-pulse"></i> Health Recommendation</h4>
+                            <p id="resRecommendation" class="recommendation-text">--</p>
+                            <h4><i class="fa-solid fa-circle-check"></i> Actionable Precautions</h4>
+                            <ul id="resTipsList" class="tips-list"></ul>
+                        </div>
+                    </div>
+                </div>
 
             </div>
+        </div>
 
+        <!-- MODEL PERFORMANCE BENCHMARK SECTION -->
+        <div class="section-container" id="benchmark-section">
+            <div class="card benchmark-card">
+                <div class="card-header-flex">
+                    <div>
+                        <h2>🏆 Machine Learning Algorithms Benchmark</h2>
+                        <p class="subtitle">Evaluated on the exact same 20% unseen test set (300 samples) with 5-fold cross-validation during tuning.</p>
+                    </div>
+                </div>
+
+                <!-- BEST MODEL HIGHLIGHT BANNER -->
+                <div class="best-model-banner">
+                    <div class="banner-icon">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <div class="banner-text">
+                        <span class="banner-sub">TOP PERFORMING ALGORITHM</span>
+                        <h3>{{ metadata.get('best_model_name', 'Gradient Boosting Regressor') }}</h3>
+                        <p>Selected automatically via lowest Root Mean Squared Error (RMSE) and highest variance explained (R² Score).</p>
+                    </div>
+                    <div class="banner-stats">
+                        <div class="banner-stat">
+                            <span>Test RMSE</span>
+                            <strong>{{ metadata.get('models', {}).get(metadata.get('best_model', 'gradient_boosting'), {}).get('test_metrics', {}).get('RMSE', '3.144') }}</strong>
+                        </div>
+                        <div class="banner-stat">
+                            <span>Test MAE</span>
+                            <strong>{{ metadata.get('models', {}).get(metadata.get('best_model', 'gradient_boosting'), {}).get('test_metrics', {}).get('MAE', '2.350') }}</strong>
+                        </div>
+                        <div class="banner-stat">
+                            <span>Test R² Score</span>
+                            <strong>{{ metadata.get('models', {}).get(metadata.get('best_model', 'gradient_boosting'), {}).get('test_metrics', {}).get('R2_Score', '0.9954') }}</strong>
+                        </div>
+                        <div class="banner-stat">
+                            <span>5-Fold CV</span>
+                            <strong>{{ metadata.get('models', {}).get(metadata.get('best_model', 'gradient_boosting'), {}).get('cv_mean_rmse', '6.142') }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPARISON TABLE -->
+                <div class="table-responsive" style="margin-top: 25px;">
+                    <table class="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Test RMSE ↓</th>
+                                <th>Test MAE ↓</th>
+                                <th>Test MSE</th>
+                                <th>R² Score ↑</th>
+                                <th>5-Fold CV RMSE</th>
+                                <th>Train Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="benchmarkTableBody">
+                            {% for key, m in metadata.get('models', {}).items() %}
+                            <tr class="{% if key == metadata.get('best_model') %}best-row{% endif %}">
+                                <td>
+                                    <strong>{{ m.name }}</strong>
+                                    {% if key == metadata.get('best_model') %}
+                                        <span class="badge-winner"><i class="fa-solid fa-star"></i> Best Model</span>
+                                    {% endif %}
+                                </td>
+                                <td class="metric-highlight mono">{{ m.test_metrics.RMSE }}</td>
+                                <td class="mono">{{ m.test_metrics.MAE }}</td>
+                                <td class="mono">{{ m.test_metrics.MSE }}</td>
+                                <td class="metric-highlight mono">{{ m.test_metrics.R2_Score }}</td>
+                                <td class="mono">{{ m.cv_mean_rmse }} (±{{ m.cv_std_rmse }})</td>
+                                <td class="mono">{{ m.training_time_sec }}s</td>
+                                <td>
+                                    {% if key == metadata.get('best_model') %}
+                                        <span class="status-pill-winner">Winner</span>
+                                    {% else %}
+                                        <span class="status-pill-evaluated">Evaluated</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- COMPARISON CHARTS ROW -->
+                <div class="charts-comparison-grid" style="margin-top: 30px;">
+                    <div class="mini-chart-card">
+                        <h4><i class="fa-solid fa-chart-simple"></i> Test RMSE Comparison (Lower is Better)</h4>
+                        <div class="chart-wrapper">
+                            <canvas id="chartRMSE"></canvas>
+                        </div>
+                    </div>
+                    <div class="mini-chart-card">
+                        <h4><i class="fa-solid fa-chart-simple"></i> Test MAE Comparison (Lower is Better)</h4>
+                        <div class="chart-wrapper">
+                            <canvas id="chartMAE"></canvas>
+                        </div>
+                    </div>
+                    <div class="mini-chart-card">
+                        <h4><i class="fa-solid fa-chart-simple"></i> R² Score Comparison (Higher is Better)</h4>
+                        <div class="chart-wrapper">
+                            <canvas id="chartR2"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- INTERACTIVE MODEL DIAGNOSTICS & RESIDUALS -->
+        <div class="section-container" id="diagnostics-section">
             <div class="card">
+                <div class="card-header-flex">
+                    <div>
+                        <h2>🔬 Model Diagnostics & Residual Analysis</h2>
+                        <p class="subtitle">Select any model to view its Actual vs Predicted correlation and Residual Error distribution ($y_{actual} - y_{pred}$).</p>
+                    </div>
+                    <div class="plot-selector-container">
+                        <label for="diagnosticModelSelect"><i class="fa-solid fa-sliders"></i> Algorithm to Inspect:</label>
+                        <select id="diagnosticModelSelect" class="model-select-styled" onchange="updateDiagnosticPlots(this.value)">
+                            <option value="gradient_boosting" selected>Gradient Boosting Regressor (Best Model)</option>
+                            <option value="extra_trees">Extra Trees Regressor</option>
+                            <option value="random_forest">Random Forest Regressor</option>
+                            <option value="decision_tree">Decision Tree Regressor</option>
+                            <option value="svr">Support Vector Regression (SVR)</option>
+                            <option value="knn">K-Nearest Neighbors Regressor (KNN)</option>
+                            <option value="linear_regression">Linear Regression</option>
+                        </select>
+                    </div>
+                </div>
 
-                <h3>💡 RECOMMENDATIONS</h3>
+                <div class="diagnostic-plots-row">
+                    <div class="plot-card">
+                        <h4 id="diagActualPredTitle">Actual vs Predicted AQI</h4>
+                        <div class="img-container">
+                            <img id="imgActualPred" src="{{ url_for('static', filename='models/gradient_boosting_actual_pred.png') }}" alt="Actual vs Predicted AQI">
+                        </div>
+                    </div>
+                    <div class="plot-card">
+                        <h4 id="diagResidualTitle">Residual Error Distribution (Actual - Predicted)</h4>
+                        <div class="img-container">
+                            <img id="imgResiduals" src="{{ url_for('static', filename='models/gradient_boosting_residuals.png') }}" alt="Residuals">
+                        </div>
+                    </div>
+                </div>
 
-                <ul class="tips">
-
-                    <li>✔ Ideal for outdoor activities</li>
-
-                    <li>✔ Keep windows open</li>
-
-                    <li>✔ Stay hydrated</li>
-
-                </ul>
+                <!-- FEATURE IMPORTANCES COMPARISON -->
+                <div class="feature-importance-section" style="margin-top: 30px;">
+                    <div class="card-header-flex">
+                        <div>
+                            <h3>🌳 Ensemble Feature Importance Comparison</h3>
+                            <p class="subtitle">Gini / Variance reduction across Gradient Boosting, Extra Trees, Random Forest, and Decision Tree.</p>
+                        </div>
+                    </div>
+                    <div class="feature-plot-wrapper">
+                        <img src="{{ url_for('static', filename='models/feature_importances_comparison.png') }}" alt="Feature Importance Comparison">
+                    </div>
+                </div>
 
             </div>
+        </div>
 
+        <!-- PREDICTION AUDIT HISTORY SECTION -->
+        <div class="section-container" id="history-section">
+            <div class="card history-card">
+                <div class="card-header-flex">
+                    <div>
+                        <h3>📜 Prediction Audit Log & Model Traceability</h3>
+                        <p class="subtitle">Persistent SQLite records storing input environmental features, model used, and predicted AQI.</p>
+                    </div>
+                    <button type="button" class="btn-small" onclick="loadPredictionHistory()">
+                        <i class="fa-solid fa-rotate"></i> Refresh Log
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Location</th>
+                                <th>Algorithm Used</th>
+                                <th>PM2.5</th>
+                                <th>CO</th>
+                                <th>NO2</th>
+                                <th>Weather</th>
+                                <th>Predicted AQI</th>
+                                <th>Category</th>
+                                <th>Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            {% for rec in history %}
+                            <tr>
+                                <td class="mono">{{ rec.timestamp }}</td>
+                                <td>{{ rec.location }}</td>
+                                <td><span class="badge-model-cell">{{ rec.model_used }}</span></td>
+                                <td>{{ rec.pm25 }}</td>
+                                <td>{{ rec.co }}</td>
+                                <td>{{ rec.no2 }}</td>
+                                <td>{{ rec.temperature }}°C | {{ rec.humidity }}%</td>
+                                <td><strong>{{ rec.predicted_aqi }}</strong></td>
+                                <td><span class="badge-cat">{{ rec.category }}</span></td>
+                                <td class="rec-cell" title="{{ rec.recommendation }}">{{ rec.recommendation }}</td>
+                            </tr>
+                            {% else %}
+                            <tr id="noHistoryRow">
+                                <td colspan="10" style="text-align:center; padding: 25px; color: #9db2c7;">No prediction records yet. Make your first prediction above!</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
     </main>
-
 </div>
 
-<!-- JS -->
-
+<!-- CLIENT JAVASCRIPT -->
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
-
 </html>

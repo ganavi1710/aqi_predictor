@@ -1,0 +1,185 @@
+{
+    "best_model": "gradient_boosting",
+    "best_model_name": "Gradient Boosting Regressor",
+    "training_date": "2026-09-01 21:10:54",
+    "dataset": {
+        "path": "data/air_quality_data.csv",
+        "total_samples": 1505,
+        "training_samples": 1200,
+        "test_samples": 300,
+        "features": [
+            "PM2.5",
+            "CO",
+            "NO2",
+            "Temperature",
+            "Humidity",
+            "Wind_Speed"
+        ],
+        "target": "AQI"
+    },
+    "features": [
+        "PM2.5",
+        "CO",
+        "NO2",
+        "Temperature",
+        "Humidity",
+        "Wind_Speed"
+    ],
+    "models": {
+        "linear_regression": {
+            "name": "Linear Regression",
+            "best_hyperparameters": {
+                "fit_intercept": true
+            },
+            "cv_mean_rmse": 17.194,
+            "cv_std_rmse": 5.479,
+            "training_time_sec": 0.01,
+            "test_metrics": {
+                "MAE": 12.164,
+                "MSE": 288.816,
+                "RMSE": 16.995,
+                "R2_Score": 0.8663
+            },
+            "feature_importances": {}
+        },
+        "decision_tree": {
+            "name": "Decision Tree Regressor",
+            "best_hyperparameters": {
+                "criterion": "friedman_mse",
+                "max_depth": 10,
+                "min_samples_leaf": 4,
+                "min_samples_split": 2
+            },
+            "cv_mean_rmse": 7.156,
+            "cv_std_rmse": 0.175,
+            "training_time_sec": 2.479,
+            "test_metrics": {
+                "MAE": 3.387,
+                "MSE": 23.557,
+                "RMSE": 4.854,
+                "R2_Score": 0.9891
+            },
+            "feature_importances": {
+                "PM2.5": 0.961,
+                "CO": 0.0356,
+                "NO2": 0.0005,
+                "Temperature": 0.0001,
+                "Humidity": 0.0007,
+                "Wind_Speed": 0.0021
+            }
+        },
+        "random_forest": {
+            "name": "Random Forest Regressor",
+            "best_hyperparameters": {
+                "max_depth": 12,
+                "min_samples_leaf": 1,
+                "min_samples_split": 2,
+                "n_estimators": 100
+            },
+            "cv_mean_rmse": 6.502,
+            "cv_std_rmse": 0.091,
+            "training_time_sec": 5.435,
+            "test_metrics": {
+                "MAE": 2.732,
+                "MSE": 13.573,
+                "RMSE": 3.684,
+                "R2_Score": 0.9937
+            },
+            "feature_importances": {
+                "PM2.5": 0.9686,
+                "CO": 0.0168,
+                "NO2": 0.0089,
+                "Temperature": 0.0011,
+                "Humidity": 0.0018,
+                "Wind_Speed": 0.0028
+            }
+        },
+        "gradient_boosting": {
+            "name": "Gradient Boosting Regressor",
+            "best_hyperparameters": {
+                "learning_rate": 0.1,
+                "max_depth": 3,
+                "min_samples_split": 4,
+                "n_estimators": 100
+            },
+            "cv_mean_rmse": 6.142,
+            "cv_std_rmse": 1.637,
+            "training_time_sec": 5.368,
+            "test_metrics": {
+                "MAE": 2.35,
+                "MSE": 9.887,
+                "RMSE": 3.144,
+                "R2_Score": 0.9954
+            },
+            "feature_importances": {
+                "PM2.5": 0.9827,
+                "CO": 0.012,
+                "NO2": 0.0023,
+                "Temperature": 0.0001,
+                "Humidity": 0.0009,
+                "Wind_Speed": 0.0021
+            }
+        },
+        "extra_trees": {
+            "name": "Extra Trees Regressor",
+            "best_hyperparameters": {
+                "max_depth": 12,
+                "min_samples_leaf": 1,
+                "min_samples_split": 2,
+                "n_estimators": 100
+            },
+            "cv_mean_rmse": 6.316,
+            "cv_std_rmse": 0.27,
+            "training_time_sec": 2.91,
+            "test_metrics": {
+                "MAE": 2.635,
+                "MSE": 11.163,
+                "RMSE": 3.341,
+                "R2_Score": 0.9948
+            },
+            "feature_importances": {
+                "PM2.5": 0.7124,
+                "CO": 0.2004,
+                "NO2": 0.0826,
+                "Temperature": 0.0008,
+                "Humidity": 0.0014,
+                "Wind_Speed": 0.0024
+            }
+        },
+        "svr": {
+            "name": "Support Vector Regression (SVR)",
+            "best_hyperparameters": {
+                "svr__C": 100.0,
+                "svr__epsilon": 0.5,
+                "svr__kernel": "rbf"
+            },
+            "cv_mean_rmse": 10.201,
+            "cv_std_rmse": 2.324,
+            "training_time_sec": 2.21,
+            "test_metrics": {
+                "MAE": 4.171,
+                "MSE": 42.638,
+                "RMSE": 6.53,
+                "R2_Score": 0.9803
+            },
+            "feature_importances": {}
+        },
+        "knn": {
+            "name": "K-Nearest Neighbors Regressor (KNN)",
+            "best_hyperparameters": {
+                "knn__n_neighbors": 5,
+                "knn__weights": "distance"
+            },
+            "cv_mean_rmse": 15.847,
+            "cv_std_rmse": 0.368,
+            "training_time_sec": 0.146,
+            "test_metrics": {
+                "MAE": 10.431,
+                "MSE": 182.985,
+                "RMSE": 13.527,
+                "R2_Score": 0.9153
+            },
+            "feature_importances": {}
+        }
+    }
+}
